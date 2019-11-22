@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS dev_tracks_resources;
