@@ -5,34 +5,6 @@ const usersRouter = express.Router()
 const bodyParser = express.json()
 
 usersRouter
-    .route('/login')
-    .post(bodyParser, (req, res, next) => {
-        const knexInstance = req.app.get('db')
-        const { user_name, password } = req.body 
-        const loginUser = { user_name, password }
-
-        for (const [key, value] of Object.entries(loginUser))
-            if(value == null)
-                return res.status(400).json({
-                    error: `missing ${key} username or password`
-                })
-
-        UsersService.getUserName(knexInstance, user_name)
-            .then(dbUser => {
-                if(!dbUser)
-                    return res.status(400).json({
-                        error: 'bad un pr pw'
-                    })
-                if(loginUser.password !== dbUser.password)
-                    return res.status(400).json({
-                        error: 'bad un or pw'
-                    })
-                res.send(dbUser.user_name)
-            })
-            .catch(next)
-    })
-
-usersRouter
     .route('/')
     .get((req, res, next) => {
         const knexInstance = req.app.get('db')
@@ -52,12 +24,32 @@ usersRouter
                 return res.status(400).json({
                     error: { message: `missing ${key}` }
                 })
-        
-        UsersService.addUser(knexInstance, newUser)
+
+        UsersService.hasUser(knexInstance, newUser.user_name)
             .then(user => {
-                res.send(201).send(user.user_name)
-            })
+                if(user)
+                    return res.status(400).json({
+                        error: { message: 'username taken' }
+                    }) 
+                
+                return UsersService.hashPassword(newUser.password)
+                    .then(hashedPassword => {
+                        const newUser = {
+                            user_name,
+                            password: hashedPassword,
+                            full_name,
+                            date_created: 'now()',
+                        }
+                        return UsersService.addUser(knexInstance, newUser)
+                            .then(user => {
+                                res.status(201).json(user)
+                            })
+                })  
+            }) 
             .catch(next)
     })
 
+// usersRouter
+//     .route('/:id')
+    
 module.exports = usersRouter;

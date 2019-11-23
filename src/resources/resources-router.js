@@ -1,5 +1,6 @@
 const express = require('express')
 const ResourcesService = require('./resource-service')
+const { requireAuth } = require('../middleware/jwt-auth')
 
 const resourcesRouter = express.Router()
 const bodyParser = express.json()
@@ -14,9 +15,9 @@ resourcesRouter
                 res.send(resources)
             }).catch(next)
     })
-    .post(bodyParser, (req, res, next) => {
+    .post(requireAuth, bodyParser, (req, res, next) => {
         const knexInstance = req.app.get('db')
-        const { name, type, status, url, description, date_completed } = req.body
+        const { name, type, status, url, description, user_id, date_completed } = req.body
         const newResource = { name, type, status, url, description }
 
         for (const [key, value] of Object.entries(newResource))
@@ -26,6 +27,7 @@ resourcesRouter
             })
         
         newResource.date_completed = date_completed
+        newResource.user_id = user_id
 
         ResourcesService.postResource(knexInstance, newResource)
             .then(resource => {
@@ -54,13 +56,11 @@ resourcesRouter
     .get((req, res, next) => {
         res.json(res.resource)
     })
-    .patch(bodyParser, (req, res, next) => {
+    .patch(requireAuth, bodyParser, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const id = req.params.id
-        const { name, type, status, url, description, date_completed } = req.body
-        const updatedResource = { name, type, status, url, description, date_completed }
-
-        console.log(updatedResource)
+        const { name, type, status, url, description, user_id, date_completed } = req.body
+        const updatedResource = { name, type, status, url, description, user_id, date_completed }
 
         for (const [key, num] of Object.entries(updatedResource))
             if (num == 0)
@@ -74,7 +74,7 @@ resourcesRouter
             })
             .catch(next)
     })
-    .delete((req, res, next) => {
+    .delete(requireAuth, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const id = req.params.id
         ResourcesService.deleteResource(knexInstance, id)
