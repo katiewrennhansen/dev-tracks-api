@@ -4,6 +4,13 @@ const UsersService = {
             .where({ user_name })
             .first()
     },
+    addUser(knex, newUser){
+        return knex
+            .insert(newUser)
+            .into('dev_tracks_users')
+            .returning('*')
+            .then(([user]) => user)
+    }
 }
 
 module.exports = UsersService;

@@ -13,15 +13,6 @@ function makeResourcesArray(){
             user_id: null
         },
         {
-            id: 13,
-            name: "Devs @ RTP",
-            type: "Meetup",
-            status: "Completed",
-            url: "https://www.meetup.com",
-            description: "This articles summarizes the importance of Design Systems in a complex application",
-            date_completed: "2019-06-10T04:00:00.000Z",
-            user_id: null
-        },
         {
             id: 14,
             name: "New Resource",

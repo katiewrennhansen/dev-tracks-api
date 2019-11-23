@@ -32,5 +32,26 @@ usersRouter
             .catch(next)
     })
 
+usersRouter
+    .route('/')
+    .post(bodyParser, (req, res, next) => {
+        const knexInstance = req.app.get('db')
+        const { user_name, full_name, password } = req.body;
+        const newUser = { user_name, full_name, password }
+
+        for(const [key, value] of Object.entries(newUser))
+            if(value == null)
+                return res.status(400).json({
+                    error: 'missing information'
+                })
+        
+        UsersService.addUser(knexInstance, newUser)
+            .then(user => {
+                res.send(204).json(newUser.user_name)
+            })
+            .catch(next)
+    })
+
+
 
 module.exports = usersRouter;
