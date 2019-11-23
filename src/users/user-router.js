@@ -34,7 +34,7 @@ usersRouter
 
 usersRouter
     .route('/')
-    .get((res, res, next) => {
+    .get((req, res, next) => {
         const knexInstance = req.app.get('db')
         UsersService.getAllUsers(knexInstance)
             .then(users => {
@@ -48,18 +48,16 @@ usersRouter
         const newUser = { user_name, full_name, password }
 
         for(const [key, value] of Object.entries(newUser))
-            if(value == null)
+            if (value == null)
                 return res.status(400).json({
-                    error: 'missing information'
+                    error: { message: `missing ${key}` }
                 })
         
         UsersService.addUser(knexInstance, newUser)
             .then(user => {
-                res.send(204).json(user.user_name)
+                res.send(201).send(user.user_name)
             })
             .catch(next)
     })
-
-
 
 module.exports = usersRouter;
