@@ -34,6 +34,14 @@ usersRouter
 
 usersRouter
     .route('/')
+    .get((res, res, next) => {
+        const knexInstance = req.app.get('db')
+        UsersService.getAllUsers(knexInstance)
+            .then(users => {
+                res.send(users)
+            })
+            .catch(next)
+    })
     .post(bodyParser, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const { user_name, full_name, password } = req.body;
@@ -47,7 +55,7 @@ usersRouter
         
         UsersService.addUser(knexInstance, newUser)
             .then(user => {
-                res.send(204).json(newUser.user_name)
+                res.send(204).json(user.user_name)
             })
             .catch(next)
     })

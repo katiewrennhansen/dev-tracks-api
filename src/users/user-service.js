@@ -1,4 +1,7 @@
 const UsersService = {
+    getAllUsers(knex){
+        return knex.select('*').from('dev_tracks_users')
+    },
     getUserName(knex, user_name){
         return knex('dev_tracks_users')
             .where({ user_name })
