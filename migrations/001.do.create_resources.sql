@@ -5,5 +5,6 @@ CREATE TABLE dev_tracks_resources (
     status TEXT NOT NULL,
     url TEXT NOT NULL,
     description TEXT NOT NULL,
-    date_completed TIMESTAMP
+    date_completed TIMESTAMP,
+    date_created TIMESTAMP DEFAULT now() NOT NULL
 )

@@ -29,7 +29,7 @@ resourcesRouter
 
         ResourcesService.postResource(knexInstance, newResource)
             .then(resource => {
-                res.status(201).send(resource)
+                res.status(201).send(newResource)
             })
             .catch(next)
     })
