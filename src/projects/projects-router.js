@@ -75,7 +75,7 @@ projectsRouter
     .delete((req, res, next) => {
         const knexInstance = req.app.get('db')
         const id = req.params.id
-        ProjectService.deleteProject(knexInstance, id)
+        ProjectsService.deleteProject(knexInstance, id)
             .then(account => {
                 res.status(204).end()
             })

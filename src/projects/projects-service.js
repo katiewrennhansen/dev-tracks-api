@@ -9,7 +9,7 @@ const ProjectsService = {
             .where({ id })
             .first()
     },
-    postProjects(knex, newAccount){
+    postProject(knex, newAccount){
         return knex
             .insert(newAccount)
             .into('user_projects')
@@ -18,12 +18,12 @@ const ProjectsService = {
                 return rows[0]
             })
     },
-    updateProjects(knex, id, updateAccount){
+    updateProject(knex, id, updateAccount){
         return knex('user_projects')
             .where({ id })
             .update(updateAccount)
     },
-    deleteProjects(knex, id){
+    deleteProject(knex, id){
         return knex('user_projects')
             .where({ id })
             .delete()
