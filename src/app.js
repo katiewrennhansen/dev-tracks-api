@@ -7,6 +7,7 @@ const { NODE_ENV, CLIENT_ORIGIN } = require('./config')
 const resourcesRouter = require('./resources/resources-router')
 const usersRouter = require('./users/user-router')
 const authRouter = require('./auth/auth-router')
+const accountsRouter = require('./accounts/accounts-router')
 
 const app = express()
 
@@ -24,6 +25,7 @@ app.use(cors(
 app.use('/api/resources', resourcesRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', authRouter)
+app.use('/api/accounts', accountsRouter)
 
 
 app.get('/', (req, res) => {
