@@ -8,6 +8,7 @@ const resourcesRouter = require('./resources/resources-router')
 const usersRouter = require('./users/user-router')
 const authRouter = require('./auth/auth-router')
 const accountsRouter = require('./accounts/accounts-router')
+const projectsRouter = require('./projects/projects-router')
 
 const app = express()
 
@@ -26,6 +27,7 @@ app.use('/api/resources', resourcesRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', authRouter)
 app.use('/api/accounts', accountsRouter)
+app.use('/api/projects', projectsRouter)
 
 
 app.get('/', (req, res) => {
