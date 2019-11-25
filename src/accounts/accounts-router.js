@@ -16,7 +16,7 @@ accountRouter
             })
             .catch(next)
     })
-    .post(bodyParser, (req, res, next) => {
+    .post(requireAuth, bodyParser, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const { name, url, user_id } = req.body
         const newAccount = { name, url, user_id }
@@ -53,7 +53,7 @@ accountRouter
     .get((req, res, next) => {
         res.send(res.account)
     })
-    .patch(bodyParser, (req, res, next) => {
+    .patch(requreAuth, bodyParser, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const id = req.params.id
         const { name, url, user_id } = req.body
@@ -72,7 +72,7 @@ accountRouter
             .catch(next)
 
     })
-    .delete((req, res, next) => {
+    .delete(requireAuth, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const id = req.params.id
         AccountsService.deleteAccount(knexInstance, id)
