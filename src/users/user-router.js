@@ -49,7 +49,52 @@ usersRouter
             .catch(next)
     })
 
-// usersRouter
-//     .route('/:id')
+usersRouter
+    .route('/:id')
+    .all((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        const id = req.params.id
+        UsersService.getUserById(knexInstance, id)
+            .then(user => {
+                if(!user) {
+                    res.send(404).json({
+                        error: 'user does not exist'
+                    })
+                }
+                res.user = user
+                next()
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.send(res.user)
+    })
+    .patch(bodyParser, (req, res, next) => {
+        const knexInstance = req.app.get('db')
+        const id = req.params.id
+        const { full_name, email, bio } = req.body
+        const updatedUser = { full_name, email, bio }
+
+        for(const [key, num] of Object.entries(updatedUser))
+            if(num == 0)
+                return res.status(400).json({
+                    error: 'need content'
+                })
+        UsersService.updateUser(knexInstance, id, updatedUser)
+            .then(user => {
+                res.status(201).end()
+            })
+            .catch(next)
+
+    })
+    .delete((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        const id = req.params.id
+        UsersService.deleteUser(knexInstance, id)
+            .then(user => {
+                res.send(204).end()
+            })
+            .catch(next)
+    })
     
 module.exports = usersRouter;

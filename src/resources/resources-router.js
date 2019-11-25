@@ -84,6 +84,18 @@ resourcesRouter
             .catch(next)
     })
 
+resourcesRouter
+    .route('/user/:user_id')
+    .get((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        const id = req.params.user_id
+        ResourcesService.getResourcesForUser(knexInstance, id)
+            .then(resources => {
+                res.send(resources)
+            })
+            .catch(next)
+    })
+
 
 
 module.exports = resourcesRouter;

@@ -4,9 +4,9 @@ const UsersService = {
     getAllUsers(knex){
         return knex.select('*').from('dev_tracks_users')
     },
-    getUserName(knex, user_name){
+    getUserById(knex, id){
         return knex('dev_tracks_users')
-            .where({ user_name })
+            .where({ id })
             .first()
     },
     addUser(knex, newUser){
@@ -15,6 +15,16 @@ const UsersService = {
             .into('dev_tracks_users')
             .returning('*')
             .then(([user]) => user)
+    },
+    deleteUser(knex, id){
+        return knex('dev_tracks_users')
+            .where({ id })
+            .delete()
+    },
+    updateUser(knex, id, updatedContent){
+        return knex('dev_tracks_users')
+            .where({ id })
+            .update(updatedContent)
     },
     hashPassword(password){
         return bcrypt.hash(password, 12)

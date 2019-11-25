@@ -2,6 +2,15 @@ const ResourcesService = {
     getAllResources(knex){
         return knex.select('*').from('dev_tracks_resources')
     },
+    getResourcesForUser(knex, user_id){
+        return knex
+        .from('dev_tracks_resources')
+        .select('*')
+        .where({ user_id })
+        .then(rows => {
+            return rows
+        })
+    },
     getResourceById(knex, id){
         return knex
             .from('dev_tracks_resources')
