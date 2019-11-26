@@ -21,7 +21,7 @@ authRouter
             .then(dbUser => {
                 if(!dbUser)
                     return res.status(400).json({
-                        error: 'bas username'
+                        error: 'bad username'
                     })
                 return AuthService.comparePasswords(loginUser.password, dbUser.password)
                     .then(match => {
