@@ -15,7 +15,7 @@ resourcesRouter
                 res.send(resources)
             }).catch(next)
     })
-    .post(requireAuth, bodyParser, (req, res, next) => {
+    .post(bodyParser, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const { name, type, status, url, description, user_id, date_completed } = req.body
         const newResource = { name, type, status, url, description }
@@ -56,7 +56,7 @@ resourcesRouter
     .get((req, res, next) => {
         res.json(res.resource)
     })
-    .patch(requireAuth, bodyParser, (req, res, next) => {
+    .patch(bodyParser, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const id = req.params.id
         const { name, type, status, url, description, user_id, date_completed } = req.body
@@ -74,7 +74,7 @@ resourcesRouter
             })
             .catch(next)
     })
-    .delete(requireAuth, (req, res, next) => {
+    .delete((req, res, next) => {
         const knexInstance = req.app.get('db')
         const id = req.params.id
         ResourcesService.deleteResource(knexInstance, id)
