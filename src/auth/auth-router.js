@@ -21,13 +21,13 @@ authRouter
             .then(dbUser => {
                 if(!dbUser)
                     return res.status(400).json({
-                        error: 'bad un pr pw'
+                        error: 'bas username'
                     })
                 return AuthService.comparePasswords(loginUser.password, dbUser.password)
                     .then(match => {
                         if(!match)
                             return res.status(400).json({
-                                error: 'bad un or pw'
+                                error: 'password not a match'
                             })
                         const sub = dbUser.user_name
                         const payload = { user_id: dbUser.id }

@@ -1,6 +1,6 @@
 const express = require('express')
 const ProjectsService = require('./projects-service')
-const requireAuth = require('../middleware/jwt-auth')
+const { requireAuth } = require('../middleware/jwt-auth')
 
 const projectsRouter = express.Router()
 const bodyParser = express.json()
@@ -16,10 +16,10 @@ projectsRouter
             })
             .catch(next)
     })
-    .post(bodyParser, (req, res, next) => {
+    .post(requireAuth, bodyParser, (req, res, next) => {
         const knexInstance = req.app.get('db')
-        const { name, url, user_id } = req.body
-        const newProject = { name, url, user_id }
+        const { name, url, description, user_id } = req.body
+        const newProject = { name, url, description, user_id }
 
         for(const [key, value] of Object.entries(newProject))
             if(value == null)
@@ -53,7 +53,7 @@ projectsRouter
     .get((req, res, next) => {
         res.send(res.project)
     })
-    .patch(bodyParser, (req, res, next) => {
+    .patch(requireAuth, bodyParser, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const id = req.params.id
         const { name, url, user_id } = req.body
@@ -72,7 +72,7 @@ projectsRouter
             .catch(next)
 
     })
-    .delete((req, res, next) => {
+    .delete(requireAuth, (req, res, next) => {
         const knexInstance = req.app.get('db')
         const id = req.params.id
         ProjectsService.deleteProject(knexInstance, id)
