@@ -35,7 +35,6 @@ const UsersService = {
             .first()
             .then(user => !!user)
     }
-
 }
 
 module.exports = UsersService;
